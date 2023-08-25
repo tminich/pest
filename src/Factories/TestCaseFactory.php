@@ -45,6 +45,7 @@ final class TestCaseFactory
      */
     private const ATTRIBUTES = [
         Attributes\Covers::class,
+        Attributes\Uses::class,
     ];
 
     /**

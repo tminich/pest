@@ -298,6 +298,63 @@ final class TestCall
     }
 
     /**
+     * Sets the covered classes or methods.
+     */
+    public function uses(string ...$classesOrFunctions): self
+    {
+        foreach ($classesOrFunctions as $classOrFunction) {
+            $isClass = class_exists($classOrFunction) || trait_exists($classOrFunction);
+            $isMethod = function_exists($classOrFunction);
+
+            if (! $isClass && ! $isMethod) {
+                throw new InvalidArgumentException(sprintf('No class or method named "%s" has been found.', $classOrFunction));
+            }
+
+            if ($isClass) {
+                $this->usesClass($classOrFunction);
+            } else {
+                $this->usesFunction($classOrFunction);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * Sets the covered classes.
+     */
+    public function usesClass(string ...$classes): self
+    {
+        foreach ($classes as $class) {
+            $this->testCaseMethod->uses[] = new CoversClass($class);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Sets the covered functions.
+     */
+    public function usesFunction(string ...$functions): self
+    {
+        foreach ($functions as $function) {
+            $this->testCaseMethod->uses[] = new CoversFunction($function);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Sets that the current test covers nothing.
+     */
+    public function usesNothing(): self
+    {
+        $this->testCaseMethod->uses = [new CoversNothing()];
+
+        return $this;
+    }
+
+    /**
      * Informs the test runner that no expectations happen in this test,
      * and its purpose is simply to check whether the given code can
      * be executed without throwing exceptions.

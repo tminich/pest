@@ -65,6 +65,13 @@ final class TestCaseMethodFactory
     public array $covers = [];
 
     /**
+     * The covered classes and functions.
+     *
+     * @var array<int, \Pest\Factories\Covers\CoversClass|\Pest\Factories\Covers\CoversFunction|\Pest\Factories\Covers\CoversNothing>
+     */
+    public array $uses = [];
+
+    /**
      * Creates a new test case method factory instance.
      */
     public function __construct(
